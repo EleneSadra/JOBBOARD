@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}About{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">About</h1>
+<p class="lead">JobBoard — ვებ პორტალი ვაკანსიების დასამატებლად და საძიებლად.</p>
+<p>
+  პლატფორმაზე რეგისტრირებული მომხმარებლები ამატებენ ვაკანსიებს,
+  რედაქტირებენ და შლიან საკუთარ განცხადებებს. სტუმრებს შეუძლიათ
+  ვაკანსიების დათვალიერება ავტორიზაციის გარეშე.
+</p>
+<p>
+  გარდა ადგილობრივი განცხადებების, საიტი
+  <a href="{{ url_for('main.remote_jobs') }}">Remote</a> გვერდზე
+  დინამიურად გამოიტანს დისტანციურ ვაკანსიებს გარე წყაროდან.
+</p>
+
+<hr class="my-4">
+<p class="text-muted small mb-0">
+  აწყობილია Flask-ზე · SQLAlchemy · Jinja2 · Bootstrap 5<br>
+  ავტორი: Elene Sadradze · 2026
+</p>
+{% endblock %}

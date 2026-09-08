@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}ვაკანსიები{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1 class="mb-0">ვაკანსიები</h1>
+  {% if current_user.is_authenticated %}
+    <a href="{{ url_for('main.new_job') }}" class="btn btn-dark">+ Add Job</a>
+  {% endif %}
+</div>
+
+<form method="GET" action="{{ url_for('main.jobs') }}" class="card card-body mb-4">
+  <div class="row g-2">
+    <div class="col-md-5">
+      <input type="text" name="search" class="form-control"
+             placeholder="ძებნა სათაურით..." value="{{ search }}">
+    </div>
+    <div class="col-md-3">
+      <select name="category" class="form-select">
+        <option value="all">ყველა კატეგორია</option>
+        {% for cat in categories %}
+          <option value="{{ cat }}" {% if active_category == cat %}selected{% endif %}>
+            {{ cat }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-2">
+      <select name="sort" class="form-select">
+        <option value="newest" {% if active_sort == 'newest' %}selected{% endif %}>ახალი</option>
+        <option value="oldest" {% if active_sort == 'oldest' %}selected{% endif %}>ძველი</option>
+      </select>
+    </div>
+    <div class="col-md-2">
+      <button type="submit" class="btn btn-dark w-100">ფილტრი</button>
+    </div>
+  </div>
+</form>
+
+{% for job in jobs %}
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="d-flex justify-content-between">
+        <h5 class="card-title">{{ job.title }}</h5>
+        <span class="badge bg-secondary">{{ job.category }}</span>
+      </div>
+      <h6 class="card-subtitle text-muted mb-2">
+        <a href="{{ url_for('main.user_jobs', username=job.author.username) }}"
+           class="text-decoration-none">{{ job.author.username }}</a>
+        · {{ job.date_posted.strftime('%d.%m.%Y') }}
+        {% if job.company %} · {{ job.company }}{% endif %}
+      </h6>
+      <p class="card-text">{{ job.short_description }}</p>
+      <a href="{{ url_for('main.job_detail', job_id=job.id) }}"
+         class="btn btn-sm btn-dark">Read More</a>
+    </div>
+  </div>
+{% else %}
+  <p class="text-muted">ვაკანსია ვერ მოიძებნა.</p>
+{% endfor %}
+{% endblock %}

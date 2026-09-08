@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block title %}პროფილი{% endblock %}
+
+{% block content %}
+  <h1 class="mb-4">პროფილი</h1>
+  <p><strong>სახელი:</strong> {{ current_user.username }}</p>
+  <p><strong>ელფოსტა:</strong> {{ current_user.email }}</p>
+{% endblock %}
