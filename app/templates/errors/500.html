@@ -2,10 +2,12 @@
 {% block title %}500{% endblock %}
 
 {% block content %}
-<div class="text-center py-5">
-  <h1 class="display-1 fw-bold text-muted">500</h1>
-  <h3 class="mb-3">სერვერის შიდა შეცდომა</h3>
-  <p class="text-muted mb-4">რაღაც შეიშალა. სცადეთ მოგვიანებით.</p>
-  <a href="{{ url_for('main.jobs') }}" class="btn btn-dark">მთავარ გვერდზე</a>
+<div class="error-page">
+  <span class="error-code">500</span>
+  <h1 class="mb-2">სერვერის შეცდომა</h1>
+  <p class="mx-auto">
+    მოთხოვნა ვერ დამუშავდა. სცადე ხელახლა რამდენიმე წუთში.
+  </p>
+  <a href="{{ url_for('main.jobs') }}" class="btn-primary">ვაკანსიებზე დაბრუნება</a>
 </div>
 {% endblock %}

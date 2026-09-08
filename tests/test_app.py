@@ -1,4 +1,5 @@
 import pytest
+
 from app import create_app, db, bcrypt
 from app.models import User, Job
 
@@ -42,43 +43,65 @@ def client(app):
 
 
 def login(client, email, password="password123"):
-    return client.post("/login", data={"email": email, "password": password},
+    return client.post("/login",
+                       data={"email": email, "password": password},
                        follow_redirects=True)
 
 
-# 1. Route ტესტი
-def test_jobs_page_loads(client):
-    response = client.get("/jobs")
-    assert response.status_code == 200
+# ── 1. Route ტესტი ──────────────────────────────────
 
-    response = client.get("/about")
-    assert response.status_code == 200
+def test_public_pages_load(client):
+    assert client.get("/jobs").status_code == 200
+    assert client.get("/about").status_code == 200
+    assert client.get("/job/1").status_code == 200
+    assert client.get("/user/elene").status_code == 200
 
 
-# 2. Login ტესტი
-def test_login_success_and_failure(client):
-    response = login(client, "elene@test.ge")
-    assert response.status_code == 200
-    assert b"Logout" in response.data
+def test_missing_job_returns_404(client):
+    assert client.get("/job/999").status_code == 404
 
+
+# ── 2. Login ტესტი ──────────────────────────────────
+
+def test_login_grants_access_to_protected_page(client):
+    # ავტორიზაციამდე დაცული გვერდი გადამისამართებას იძლევა
+    response = client.get("/profile")
+    assert response.status_code == 302
+
+    # სწორი მონაცემებით შესვლის შემდეგ — იხსნება
+    login(client, "elene@test.ge")
+    assert client.get("/profile").status_code == 200
+
+
+def test_login_fails_with_wrong_password(client):
+    login(client, "elene@test.ge", "wrong-password")
+    # სესია არ შეიქმნა, ამიტომ დაცული გვერდი ისევ დახურულია
+    assert client.get("/profile").status_code == 302
+
+
+def test_logout_ends_session(client):
+    login(client, "elene@test.ge")
     client.get("/logout")
-
-    response = login(client, "elene@test.ge", "wrong-password")
-    assert b"Logout" not in response.data
+    assert client.get("/profile").status_code == 302
 
 
-# 3. უფლებების ტესტი
-def test_cannot_edit_others_job(client):
+# ── 3. უფლებების ტესტი ──────────────────────────────
+
+def test_cannot_edit_or_delete_others_job(client):
     login(client, "nino@test.ge")
 
-    response = client.get("/job/1/update")
-    assert response.status_code == 403
-
-    response = client.post("/job/1/delete")
-    assert response.status_code == 403
+    assert client.get("/job/1/update").status_code == 403
+    assert client.post("/job/1/delete").status_code == 403
 
 
 def test_owner_can_edit_own_job(client):
     login(client, "elene@test.ge")
-    response = client.get("/job/1/update")
-    assert response.status_code == 200
+    assert client.get("/job/1/update").status_code == 200
+
+
+def test_others_job_survives_delete_attempt(app, client):
+    login(client, "nino@test.ge")
+    client.post("/job/1/delete")
+
+    with app.app_context():
+        assert db.session.get(Job, 1) is not None

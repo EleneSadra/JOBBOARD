@@ -1,3 +1,6 @@
+import os
+import secrets
+
 import requests
 from flask import (Blueprint, render_template, url_for, flash, redirect,
                    request, abort, current_app)
@@ -5,10 +8,13 @@ from flask_login import login_user, current_user, logout_user, login_required
 
 from app import db, bcrypt
 from app.models import User, Job
-from app.forms import RegistrationForm, LoginForm, JobForm
+from app.forms import (RegistrationForm, LoginForm, JobForm,
+                       UpdateProfileForm)
 
 main = Blueprint("main", __name__)
 
+
+# ── დამხმარე ფუნქციები ──────────────────────────────
 
 def fetch_remote_jobs(limit=6):
     """Remotive API-დან დისტანციური ვაკანსიების წამოღება."""
@@ -36,6 +42,20 @@ def fetch_remote_jobs(limit=6):
         current_app.logger.error(f"API request error: {e}")
         return None
 
+
+def save_picture(form_picture):
+    """სურათს ინახავს შემთხვევითი სახელით, აბრუნებს ფაილის სახელს."""
+    random_hex = secrets.token_hex(8)
+    _, ext = os.path.splitext(form_picture.filename)
+    filename = random_hex + ext
+
+    folder = os.path.join(current_app.root_path, "static", "avatars")
+    os.makedirs(folder, exist_ok=True)
+    form_picture.save(os.path.join(folder, filename))
+    return filename
+
+
+# ── საჯარო გვერდები ─────────────────────────────────
 
 @main.route("/")
 @main.route("/jobs")
@@ -75,6 +95,22 @@ def remote_jobs():
     external_jobs = fetch_remote_jobs()
     return render_template("remote_jobs.html", jobs=external_jobs)
 
+
+@main.route("/job/<int:job_id>")
+def job_detail(job_id):
+    job = db.get_or_404(Job, job_id)
+    return render_template("job_detail.html", job=job)
+
+
+@main.route("/user/<string:username>")
+def user_jobs(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    user_job_list = (Job.query.filter_by(author=user)
+                     .order_by(Job.date_posted.desc()).all())
+    return render_template("user_jobs.html", jobs=user_job_list, user=user)
+
+
+# ── ავტორიზაცია ─────────────────────────────────────
 
 @main.route("/register", methods=["GET", "POST"])
 def register():
@@ -121,11 +157,32 @@ def logout():
     return redirect(url_for("main.jobs"))
 
 
-@main.route("/profile")
+@main.route("/profile", methods=["GET", "POST"])
 @login_required
 def profile():
-    return render_template("profile.html")
+    form = UpdateProfileForm()
 
+    if form.validate_on_submit():
+        if form.picture.data:
+            current_user.image_file = save_picture(form.picture.data)
+        current_user.username = form.username.data
+        current_user.email = form.email.data
+        db.session.commit()
+        current_app.logger.info(f"პროფილი განახლდა: {current_user.email}")
+        flash("პროფილი განახლდა.", "success")
+        return redirect(url_for("main.profile"))
+
+    elif request.method == "GET":
+        form.username.data = current_user.username
+        form.email.data = current_user.email
+
+    my_jobs = (Job.query.filter_by(author=current_user)
+               .order_by(Job.date_posted.desc()).all())
+
+    return render_template("profile.html", form=form, my_jobs=my_jobs)
+
+
+# ── ვაკანსიების CRUD ────────────────────────────────
 
 @main.route("/job/new", methods=["GET", "POST"])
 @login_required
@@ -147,15 +204,9 @@ def new_job():
         current_app.logger.info(
             f"ვაკანსია დაემატა: '{job.title}' — {current_user.username}")
         flash("ვაკანსია დაემატა.", "success")
-        return redirect(url_for("main.jobs"))
+        return redirect(url_for("main.job_detail", job_id=job.id))
 
     return render_template("job_form.html", form=form, legend="ახალი ვაკანსია")
-
-
-@main.route("/job/<int:job_id>")
-def job_detail(job_id):
-    job = db.get_or_404(Job, job_id)
-    return render_template("job_detail.html", job=job)
 
 
 @main.route("/job/<int:job_id>/update", methods=["GET", "POST"])
@@ -206,11 +257,3 @@ def delete_job(job_id):
     db.session.commit()
     flash("ვაკანსია წაიშალა.", "success")
     return redirect(url_for("main.jobs"))
-
-
-@main.route("/user/<string:username>")
-def user_jobs(username):
-    user = User.query.filter_by(username=username).first_or_404()
-    user_job_list = (Job.query.filter_by(author=user)
-                     .order_by(Job.date_posted.desc()).all())
-    return render_template("user_jobs.html", jobs=user_job_list, user=user)

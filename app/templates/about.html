@@ -1,23 +1,50 @@
 {% extends "base.html" %}
-{% block title %}About{% endblock %}
+{% block title %}ჩვენ შესახებ{% endblock %}
 
 {% block content %}
-<h1 class="mb-4">About</h1>
-<p class="lead">JobBoard — ვებ პორტალი ვაკანსიების დასამატებლად და საძიებლად.</p>
-<p>
-  პლატფორმაზე რეგისტრირებული მომხმარებლები ამატებენ ვაკანსიებს,
-  რედაქტირებენ და შლიან საკუთარ განცხადებებს. სტუმრებს შეუძლიათ
-  ვაკანსიების დათვალიერება ავტორიზაციის გარეშე.
-</p>
-<p>
-  გარდა ადგილობრივი განცხადებების, საიტი
-  <a href="{{ url_for('main.remote_jobs') }}">Remote</a> გვერდზე
-  დინამიურად გამოიტანს დისტანციურ ვაკანსიებს გარე წყაროდან.
-</p>
+<div class="row g-4">
+  <div class="col-lg-7">
+    <h1 class="mb-3">ჩვენ შესახებ</h1>
+    <p class="lede">
+      JobBoard ვაკანსიების პორტალია, სადაც რეგისტრირებული მომხმარებელი
+      აქვეყნებს განცხადებას, რედაქტირებს და შლის საკუთარს.
+    </p>
+    <p>
+      სტუმარს შეუძლია ყველა ვაკანსიის ნახვა ავტორიზაციის გარეშე —
+      ძებნა სათაურით, გაფილტვრა კატეგორიით და დალაგება თარიღით.
+      განცხადების დამატებას ანგარიში სჭირდება.
+    </p>
+    <p>
+      გარდა ადგილობრივი განცხადებებისა,
+      <a href="{{ url_for('main.remote_jobs') }}">დისტანციური</a> გვერდზე
+      გარე წყაროდან რეალურ დროში ჩამოდის დისტანციური ვაკანსიები.
+    </p>
+  </div>
 
-<hr class="my-4">
-<p class="text-muted small mb-0">
-  აწყობილია Flask-ზე · SQLAlchemy · Jinja2 · Bootstrap 5<br>
-  ავტორი: Elene Sadradze · 2026
-</p>
+  <div class="col-lg-5">
+    <div class="panel side-panel">
+      <h2 class="h6 mb-3">რაზეა აწყობილი</h2>
+      <div class="side-row">
+        <span class="side-label">ბექენდი</span>
+        <span class="side-value">Flask</span>
+      </div>
+      <div class="side-row">
+        <span class="side-label">ბაზა</span>
+        <span class="side-value">SQLAlchemy · PostgreSQL</span>
+      </div>
+      <div class="side-row">
+        <span class="side-label">შაბლონები</span>
+        <span class="side-value">Jinja2 · Bootstrap</span>
+      </div>
+      <div class="side-row">
+        <span class="side-label">ავტორიზაცია</span>
+        <span class="side-value">Flask-Login · bcrypt</span>
+      </div>
+      <div class="side-row">
+        <span class="side-label">ავტორი</span>
+        <span class="side-value">ელენე სადრაძე</span>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

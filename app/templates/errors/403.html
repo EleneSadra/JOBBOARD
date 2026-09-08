@@ -2,10 +2,12 @@
 {% block title %}403{% endblock %}
 
 {% block content %}
-<div class="text-center py-5">
-  <h1 class="display-1 fw-bold text-muted">403</h1>
-  <h3 class="mb-3">წვდომა შეზღუდულია</h3>
-  <p class="text-muted mb-4">ამ მოქმედების შესრულების უფლება არ გაქვთ.</p>
-  <a href="{{ url_for('main.jobs') }}" class="btn btn-dark">მთავარ გვერდზე</a>
+<div class="error-page">
+  <span class="error-code">403</span>
+  <h1 class="mb-2">წვდომა შეზღუდულია</h1>
+  <p class="mx-auto">
+    ამ განცხადების რედაქტირება ან წაშლა მხოლოდ მის ავტორს შეუძლია.
+  </p>
+  <a href="{{ url_for('main.jobs') }}" class="btn-primary">ვაკანსიებზე დაბრუნება</a>
 </div>
 {% endblock %}

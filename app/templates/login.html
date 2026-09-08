@@ -4,34 +4,32 @@
 {% block content %}
 <div class="row justify-content-center">
   <div class="col-md-5">
-    <div class="card">
-      <div class="card-body">
-        <h2 class="mb-4">შესვლა</h2>
-        <form method="POST" action="">
-          {{ form.hidden_tag() }}
+    <div class="panel">
+      <h1 class="mb-1">შესვლა</h1>
+      <p class="text-muted-2 mb-4">ვაკანსიის დამატებას ავტორიზაცია სჭირდება.</p>
 
-          <div class="mb-3">
-            {{ form.email.label(class="form-label") }}
-            {{ form.email(class="form-control") }}
-            {% for e in form.email.errors %}
-              <div class="text-danger small">{{ e }}</div>
-            {% endfor %}
-          </div>
+      <form method="POST" action="">
+        {{ form.hidden_tag() }}
 
-          <div class="mb-3">
-            {{ form.password.label(class="form-label") }}
-            {{ form.password(class="form-control") }}
-            {% for e in form.password.errors %}
-              <div class="text-danger small">{{ e }}</div>
-            {% endfor %}
-          </div>
+        <div class="mb-3">
+          {{ form.email.label(class="form-label") }}
+          {{ form.email(class="form-control") }}
+          {% for e in form.email.errors %}<div class="field-error">{{ e }}</div>{% endfor %}
+        </div>
 
-          {{ form.submit(class="btn btn-dark w-100") }}
-        </form>
-        <p class="mt-3 mb-0 text-muted small">
-          არ გაქვთ ანგარიში? <a href="{{ url_for('main.register') }}">რეგისტრაცია</a>
-        </p>
-      </div>
+        <div class="mb-4">
+          {{ form.password.label(class="form-label") }}
+          {{ form.password(class="form-control") }}
+          {% for e in form.password.errors %}<div class="field-error">{{ e }}</div>{% endfor %}
+        </div>
+
+        {{ form.submit(class="btn-primary w-100") }}
+      </form>
+
+      <p class="text-muted-2 mt-4 mb-0" style="font-size: 0.92rem;">
+        არ გაქვს ანგარიში?
+        <a href="{{ url_for('main.register') }}">დარეგისტრირდი</a>
+      </p>
     </div>
   </div>
 </div>

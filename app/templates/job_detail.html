@@ -2,36 +2,60 @@
 {% block title %}{{ job.title }}{% endblock %}
 
 {% block content %}
-<div class="card">
-  <div class="card-body">
-    <span class="badge bg-secondary mb-2">{{ job.category }}</span>
-    <h1 class="card-title">{{ job.title }}</h1>
-    <h5 class="text-muted">{{ job.company }} · {{ job.location }}</h5>
-    <p class="mb-1"><strong>ხელფასი:</strong> {{ job.salary }}</p>
-    <p class="text-muted small">
-      ავტორი:
-      <a href="{{ url_for('main.user_jobs', username=job.author.username) }}">
-        {{ job.author.username }}
-      </a>
-      · {{ job.date_posted.strftime('%d.%m.%Y') }}
-    </p>
+<a href="{{ url_for('main.jobs') }}" class="back-link">ყველა ვაკანსია</a>
 
-    <hr>
-    <p style="white-space: pre-line;">{{ job.full_description }}</p>
+<div class="row g-4 mt-1">
+  <div class="col-lg-8">
+    <div class="panel">
+      <span class="tag mb-3 d-inline-block">{{ job.category }}</span>
+      <h1 class="mb-2">{{ job.title }}</h1>
+      <p class="detail-company mb-4">{{ job.company }} · {{ job.location }}</p>
 
-    {% if current_user.is_authenticated and job.author == current_user %}
-      <hr>
-      <a href="{{ url_for('main.update_job', job_id=job.id) }}"
-         class="btn btn-outline-dark btn-sm">რედაქტირება</a>
-      <form method="POST" action="{{ url_for('main.delete_job', job_id=job.id) }}"
-            class="d-inline"
-            onsubmit="return confirm('დარწმუნებული ხართ, რომ გსურთ წაშლა?');">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        <button type="submit" class="btn btn-outline-danger btn-sm">წაშლა</button>
-      </form>
-    {% endif %}
+      <h2 class="h5 mb-2">ვაკანსიის აღწერა</h2>
+      <p class="detail-body">{{ job.full_description }}</p>
+
+      {% if current_user.is_authenticated and job.author == current_user %}
+        <hr class="my-4">
+        <div class="d-flex gap-2">
+          <a href="{{ url_for('main.update_job', job_id=job.id) }}"
+             class="btn-ghost">რედაქტირება</a>
+          <form method="POST" action="{{ url_for('main.delete_job', job_id=job.id) }}"
+                onsubmit="return confirm('წაიშალოს „{{ job.title }}“?');">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit" class="btn-danger-ghost">წაშლა</button>
+          </form>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="col-lg-4">
+    <div class="panel side-panel">
+      <div class="side-row">
+        <span class="side-label">ხელფასი</span>
+        <span class="side-value side-salary">{{ job.salary }}</span>
+      </div>
+      <div class="side-row">
+        <span class="side-label">ლოკაცია</span>
+        <span class="side-value">{{ job.location }}</span>
+      </div>
+      <div class="side-row">
+        <span class="side-label">კომპანია</span>
+        <span class="side-value">{{ job.company }}</span>
+      </div>
+      <div class="side-row">
+        <span class="side-label">გამოქვეყნდა</span>
+        <span class="side-value">{{ job.date_posted.strftime('%d.%m.%Y') }}</span>
+      </div>
+      <div class="side-row">
+        <span class="side-label">ავტორი</span>
+        <span class="side-value">
+          <a href="{{ url_for('main.user_jobs', username=job.author.username) }}">
+            {{ job.author.username }}
+          </a>
+        </span>
+      </div>
+    </div>
   </div>
 </div>
-
-<a href="{{ url_for('main.jobs') }}" class="btn btn-link mt-3">← ყველა ვაკანსია</a>
 {% endblock %}

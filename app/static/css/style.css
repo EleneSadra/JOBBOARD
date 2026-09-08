@@ -1,0 +1,348 @@
+:root {
+  --twilight:   #140D4F;
+  --twilight-2: #241a6b;
+  --void:       #1C0B19;
+  --emerald:    #2DD881;
+  --emerald-d:  #1FB268;
+  --aqua:       #6FEDB7;
+  --aqua-soft:  #E4FBF1;
+  --mist:       #4EA699;
+  --paper:      #F7F7FB;
+  --surface:    #FFFFFF;
+  --rule:       #E3E3EE;
+  --muted:      #6E6E8A;
+  --measure: 68ch;
+}
+
+/* ── ბაზისი ─────────────────────────────── */
+body {
+  font-family: "Noto Sans Georgian", system-ui, sans-serif;
+  background: var(--paper);
+  color: var(--twilight);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5 {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--twilight);
+}
+
+h1 { font-size: clamp(1.9rem, 4vw, 2.6rem); }
+h2 { font-size: clamp(1.35rem, 3vw, 1.75rem); }
+p  { max-width: var(--measure); }
+
+a {
+  color: var(--twilight);
+  text-decoration: underline;
+  text-decoration-color: var(--aqua);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+a:hover { color: var(--emerald-d); text-decoration-color: var(--emerald); }
+
+::selection { background: var(--aqua); color: var(--twilight); }
+
+:focus-visible {
+  outline: 2px solid var(--emerald-d);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* ── ნავიგაცია ──────────────────────────── */
+.site-nav {
+  background: var(--surface);
+  border-bottom: 1px solid var(--rule);
+  padding: 0.85rem 0;
+}
+.site-nav .logo img {
+  height: 64px;
+  width: auto;
+  display: block;
+  margin: -14px 0;
+  mix-blend-mode: multiply;
+}
+.site-nav .nav-links { display: flex; gap: 1.5rem; align-items: center; }
+.site-nav .nav-links a {
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 0.94rem;
+  text-decoration: none;
+  padding-bottom: 2px;
+  border-bottom: 2px solid transparent;
+}
+.site-nav .nav-links a:hover {
+  color: var(--twilight);
+  border-bottom-color: var(--aqua);
+}
+.site-nav .nav-links a.is-cta { color: var(--emerald-d); }
+
+/* ── Hero ───────────────────────────────── */
+.hero {
+  background: var(--twilight);
+  color: #fff;
+  padding: 3.4rem 0 3rem;
+}
+.hero h1 { color: #fff; margin-bottom: 0.5rem; }
+.hero .hero-sub {
+  color: var(--aqua);
+  font-weight: 600;
+  margin-bottom: 1.8rem;
+  max-width: 46ch;
+}
+
+.search-bar { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+.search-bar input[type="text"],
+.search-bar select {
+  border: none;
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  font-size: 1rem;
+  font-family: inherit;
+  background: var(--surface);
+  color: var(--twilight);
+}
+.search-bar input[type="text"] { flex: 1 1 260px; }
+.search-bar select { flex: 0 1 170px; }
+.search-bar input::placeholder { color: var(--muted); }
+
+/* ── ღილაკები ───────────────────────────── */
+.btn-primary,
+.btn-primary:focus {
+  background: var(--emerald);
+  border: none;
+  color: var(--twilight);
+  font-weight: 700;
+  border-radius: 10px;
+  padding: 0.8rem 1.5rem;
+  text-decoration: none;
+}
+.btn-primary:hover { background: var(--aqua); color: var(--twilight); }
+
+.btn-ghost {
+  background: transparent;
+  border: 1.5px solid var(--rule);
+  color: var(--twilight);
+  font-weight: 600;
+  border-radius: 10px;
+  padding: 0.5rem 1.1rem;
+  font-size: 0.92rem;
+  text-decoration: none;
+}
+.btn-ghost:hover {
+  border-color: var(--twilight);
+  background: var(--surface);
+  color: var(--twilight);
+  text-decoration: none;
+}
+
+.btn-danger-ghost {
+  background: transparent;
+  border: 1.5px solid #F3C9C9;
+  color: #B4373C;
+  font-weight: 600;
+  border-radius: 10px;
+  padding: 0.5rem 1.1rem;
+  font-size: 0.92rem;
+}
+.btn-danger-ghost:hover { background: #FDF0F0; border-color: #B4373C; color: #B4373C; }
+
+.btn-read-more {
+  display: inline-block;
+  background: var(--twilight);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.88rem;
+  padding: 0.5rem 1.2rem;
+  border-radius: 8px;
+  text-decoration: none;
+  border: none;
+  transition: background 0.15s ease;
+}
+.btn-read-more:hover {
+  background: var(--emerald);
+  color: var(--twilight);
+  text-decoration: none;
+}
+
+/* ── ვაკანსიების რეესტრი ────────────────── */
+.registry {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.listing {
+  padding: 1.4rem 1.6rem;
+  border-bottom: 1px solid var(--rule);
+}
+.listing:last-child { border-bottom: none; }
+.listing:hover { background: #FBFBFE; }
+
+.listing-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: baseline;
+}
+.listing-title { font-size: 1.18rem; font-weight: 700; margin: 0; }
+.listing-title a { text-decoration: none; color: var(--twilight); }
+.listing-title a:hover { color: var(--emerald-d); }
+
+.listing-meta { color: var(--muted); font-size: 0.88rem; margin: 0.35rem 0 0.6rem; }
+.listing-desc { color: #3C3C57; margin: 0; max-width: var(--measure); }
+
+.listing-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+.listing-salary { color: var(--emerald-d); font-weight: 700; font-size: 0.95rem; }
+
+.meta-link { color: var(--muted); text-decoration: none; }
+.meta-link:hover { color: var(--twilight); text-decoration: underline; }
+
+.tag {
+  background: var(--aqua-soft);
+  color: var(--mist);
+  border: 1px solid var(--aqua);
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+/* ── პანელი ─────────────────────────────── */
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  padding: 2rem;
+}
+
+.form-label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--twilight);
+  margin-bottom: 0.3rem;
+}
+.form-control, .form-select {
+  border: 1.5px solid var(--rule);
+  border-radius: 10px;
+  padding: 0.7rem 0.9rem;
+  font-family: inherit;
+  color: var(--twilight);
+}
+.form-control:focus, .form-select:focus {
+  border-color: var(--emerald);
+  box-shadow: 0 0 0 3px var(--aqua-soft);
+}
+.field-error { color: #B4373C; font-size: 0.85rem; margin-top: 0.25rem; }
+
+/* ── შეტყობინებები ──────────────────────── */
+.alert { border: none; border-radius: 10px; border-left: 4px solid; font-weight: 500; }
+.alert-success { background: var(--aqua-soft); border-left-color: var(--emerald); color: #12674A; }
+.alert-danger  { background: #FDF0F0; border-left-color: #B4373C; color: #8E2B2F; }
+.alert-info    { background: #EFEFF8; border-left-color: var(--twilight); color: var(--twilight); }
+
+/* ── ცარიელი მდგომარეობა ────────────────── */
+.empty {
+  background: var(--surface);
+  border: 1px dashed var(--rule);
+  border-radius: 14px;
+  padding: 3rem 2rem;
+  text-align: center;
+  color: var(--muted);
+}
+
+/* ── დეტალების გვერდი ───────────────────── */
+.back-link {
+  display: inline-block;
+  color: var(--muted);
+  font-size: 0.92rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+.back-link::before { content: "← "; }
+.back-link:hover { color: var(--twilight); }
+
+.detail-company { color: var(--mist); font-weight: 600; font-size: 1.05rem; }
+.detail-body { white-space: pre-line; color: #3C3C57; }
+
+.side-panel { padding: 1.2rem 1.4rem; }
+.side-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid var(--rule);
+  font-size: 0.94rem;
+}
+.side-row:last-child { border-bottom: none; }
+.side-label { color: var(--muted); }
+.side-value { font-weight: 600; text-align: right; }
+.side-salary { color: var(--emerald-d); }
+
+/* ── ავატარი და პროფილი ─────────────────── */
+.avatar {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--aqua);
+  flex-shrink: 0;
+}
+.avatar-initial {
+  display: grid;
+  place-items: center;
+  background: var(--twilight);
+  color: var(--aqua);
+  font-size: 1.7rem;
+  font-weight: 800;
+  border-color: var(--twilight);
+}
+
+.text-muted-2 { color: var(--muted); }
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  background: var(--aqua-soft);
+  border-radius: 10px;
+  padding: 0.8rem 1.1rem;
+  font-size: 0.94rem;
+  color: var(--mist);
+  font-weight: 600;
+}
+.stat-row strong { color: var(--twilight); font-size: 1.3rem; }
+
+/* ── შეცდომების გვერდები ────────────────── */
+.error-page { text-align: center; padding: 4rem 1rem; }
+.error-page p { margin: 0 auto 1.8rem; max-width: 42ch; color: var(--muted); }
+.error-code {
+  display: block;
+  font-size: clamp(4rem, 12vw, 7rem);
+  font-weight: 800;
+  line-height: 1;
+  color: var(--aqua);
+  letter-spacing: -0.04em;
+  margin-bottom: 0.5rem;
+}
+
+/* ── სხვადასხვა ─────────────────────────── */
+.lede { font-size: 1.12rem; color: #3C3C57; }
+.remote-salary { color: var(--emerald-d); font-weight: 700; font-size: 0.94rem; }
+
+/* ── ფუტერი ─────────────────────────────── */
+.site-footer {
+  background: var(--void);
+  color: #A9A4B4;
+  padding: 1.8rem 0;

@@ -2,7 +2,95 @@
 {% block title %}პროფილი{% endblock %}
 
 {% block content %}
-  <h1 class="mb-4">პროფილი</h1>
-  <p><strong>სახელი:</strong> {{ current_user.username }}</p>
-  <p><strong>ელფოსტა:</strong> {{ current_user.email }}</p>
+<div class="row g-4">
+
+  <div class="col-lg-5">
+    <div class="panel">
+      <div class="d-flex align-items-center gap-3 mb-4">
+        {% if current_user.image_file == 'default.jpg' %}
+          <span class="avatar avatar-initial">{{ current_user.username[0]|upper }}</span>
+        {% else %}
+          <img class="avatar"
+               src="{{ url_for('static', filename='avatars/' + current_user.image_file) }}"
+               alt="{{ current_user.username }}">
+        {% endif %}
+        <div>
+          <h2 class="mb-0">{{ current_user.username }}</h2>
+          <p class="text-muted-2 mb-0">{{ current_user.email }}</p>
+        </div>
+      </div>
+
+      <div class="stat-row">
+        <span>დამატებული ვაკანსია</span>
+        <strong>{{ my_jobs|length }}</strong>
+      </div>
+
+      <hr class="my-4">
+
+      <h3 class="h5 mb-3">მონაცემების შეცვლა</h3>
+      <form method="POST" action="" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+
+        <div class="mb-3">
+          {{ form.username.label(class="form-label") }}
+          {{ form.username(class="form-control") }}
+          {% for e in form.username.errors %}<div class="field-error">{{ e }}</div>{% endfor %}
+        </div>
+
+        <div class="mb-3">
+          {{ form.email.label(class="form-label") }}
+          {{ form.email(class="form-control") }}
+          {% for e in form.email.errors %}<div class="field-error">{{ e }}</div>{% endfor %}
+        </div>
+
+        <div class="mb-4">
+          {{ form.picture.label(class="form-label") }}
+          {{ form.picture(class="form-control") }}
+          {% for e in form.picture.errors %}<div class="field-error">{{ e }}</div>{% endfor %}
+        </div>
+
+        {{ form.submit(class="btn-primary") }}
+      </form>
+    </div>
+  </div>
+
+  <div class="col-lg-7">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2 class="mb-0">ჩემი ვაკანსიები</h2>
+      <a href="{{ url_for('main.new_job') }}" class="btn-ghost">დამატება</a>
+    </div>
+
+    {% if my_jobs %}
+      <div class="registry">
+        {% for job in my_jobs %}
+          <div class="listing">
+            <div class="listing-head">
+              <h3 class="listing-title">
+                <a href="{{ url_for('main.job_detail', job_id=job.id) }}">{{ job.title }}</a>
+              </h3>
+              <span class="tag">{{ job.category }}</span>
+            </div>
+            <p class="listing-meta">
+              {{ job.company }} · {{ job.date_posted.strftime('%d.%m.%Y') }}
+            </p>
+            <div class="d-flex gap-2">
+              <a href="{{ url_for('main.update_job', job_id=job.id) }}"
+                 class="btn-ghost">რედაქტირება</a>
+              <form method="POST" action="{{ url_for('main.delete_job', job_id=job.id) }}"
+                    onsubmit="return confirm('წაიშალოს „{{ job.title }}“?');">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="btn-danger-ghost">წაშლა</button>
+              </form>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty">
+        ჯერ არ დაგიმატებია ვაკანსია.
+      </div>
+    {% endif %}
+  </div>
+
+</div>
 {% endblock %}

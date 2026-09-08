@@ -2,18 +2,47 @@
 {% block title %}{{ user.username }}{% endblock %}
 
 {% block content %}
-  <h1 class="mb-4">{{ user.username }}-ის ვაკანსიები ({{ jobs|length }})</h1>
-
-  {% for job in jobs %}
-    <div class="card mb-3">
-      <div class="card-body">
-        <h5 class="card-title">{{ job.title }}</h5>
-        <p class="card-text">{{ job.short_description }}</p>
-        <a href="{{ url_for('main.job_detail', job_id=job.id) }}"
-           class="btn btn-sm btn-dark">Read More</a>
-      </div>
-    </div>
+<div class="d-flex align-items-center gap-3 mb-4">
+  {% if user.image_file == 'default.jpg' %}
+    <span class="avatar avatar-initial">{{ user.username[0]|upper }}</span>
   {% else %}
-    <p class="text-muted">ამ მომხმარებელს ჯერ არ დაუმატებია ვაკანსია.</p>
-  {% endfor %}
+    <img class="avatar"
+         src="{{ url_for('static', filename='avatars/' + user.image_file) }}"
+         alt="{{ user.username }}">
+  {% endif %}
+  <div>
+    <h1 class="mb-0">{{ user.username }}</h1>
+    <p class="text-muted-2 mb-0">{{ jobs|length }} გამოქვეყნებული ვაკანსია</p>
+  </div>
+</div>
+
+{% if jobs %}
+  <div class="registry">
+    {% for job in jobs %}
+      <div class="listing">
+        <div class="listing-head">
+          <h3 class="listing-title">
+            <a href="{{ url_for('main.job_detail', job_id=job.id) }}">{{ job.title }}</a>
+          </h3>
+          <span class="tag">{{ job.category }}</span>
+        </div>
+        <p class="listing-meta">
+          {{ job.company }} · {{ job.location }} · {{ job.date_posted.strftime('%d.%m.%Y') }}
+        </p>
+        <p class="listing-desc">{{ job.short_description }}</p>
+
+        <div class="listing-foot">
+          <span class="listing-salary">{{ job.salary }}</span>
+          <a href="{{ url_for('main.job_detail', job_id=job.id) }}" class="btn-read-more">
+            Read More
+          </a>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="empty">
+    {{ user.username }}-ს ჯერ არ დაუმატებია ვაკანსია.
+  </div>
+{% endif %}
 {% endblock %}
