@@ -169,18 +169,22 @@ a:hover { color: var(--emerald-d); text-decoration-color: var(--emerald); }
 
 /* ── ვაკანსიების რეესტრი ────────────────── */
 .registry {
-  background: var(--surface);
-  border: 1px solid var(--rule);
-  border-radius: 14px;
-  overflow: hidden;
+  display: grid;
+  gap: 1rem;
 }
 
 .listing {
-  padding: 1.4rem 1.6rem;
-  border-bottom: 1px solid var(--rule);
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  padding: 1.5rem 1.6rem;
+  box-shadow: 0 1px 2px rgba(20, 13, 79, 0.04);
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
 }
-.listing:last-child { border-bottom: none; }
-.listing:hover { background: #FBFBFE; }
+.listing:hover {
+  border-color: var(--aqua);
+  box-shadow: 0 4px 16px rgba(20, 13, 79, 0.08);
+}
 
 .listing-head {
   display: flex;
@@ -346,3 +350,9 @@ a:hover { color: var(--emerald-d); text-decoration-color: var(--emerald); }
   background: var(--void);
   color: #A9A4B4;
   padding: 1.8rem 0;
+
+@media (min-width: 992px) {
+  .registry { grid-template-columns: repeat(2, 1fr); }
+  .listing { display: flex; flex-direction: column; }
+  .listing-foot { margin-top: auto; padding-top: 1rem; }
+}
